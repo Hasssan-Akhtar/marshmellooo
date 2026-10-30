@@ -1,0 +1,446 @@
+[
+  {
+    "name": "Marshmallow",
+    "blurb": "The original. Fluffy pink on cocoa.",
+    "style": {
+      "comment": "italic",
+      "keyword": "italic",
+      "parameter": "italic",
+      "language": "italic",
+      "attribute": "italic"
+    },
+    "night": {
+      "bg": "#2B2838",
+      "fg": "#EDE6F5",
+      "side": "#252230",
+      "accent": "#FFB3D1",
+      "line": "#332F43",
+      "syn": {
+        "k": "#FF9EC7",
+        "f": "#8FD3FF",
+        "s": "#A8E6B8",
+        "n": "#FFC69E",
+        "t": "#C7A8FF",
+        "p": "#FFE08F",
+        "c": "#7D7396",
+        "o": "#A79DC0"
+      }
+    },
+    "day": {
+      "bg": "#FFFAF6",
+      "fg": "#3A3247",
+      "side": "#F8F1EB",
+      "accent": "#E0559A",
+      "line": "#FBF0E8",
+      "syn": {
+        "k": "#D6428A",
+        "f": "#2A86C9",
+        "s": "#2E9C5A",
+        "n": "#D9732A",
+        "t": "#8152D6",
+        "p": "#A87400",
+        "c": "#A496AE",
+        "o": "#8C7F99"
+      }
+    }
+  },
+  {
+    "name": "Bubblegum",
+    "blurb": "Pop a bubble, push a commit.",
+    "style": {
+      "comment": "italic",
+      "keyword": "bold",
+      "function": "bold",
+      "language": "bold italic",
+      "link": "underline"
+    },
+    "night": {
+      "bg": "#31212B",
+      "fg": "#F4E7EF",
+      "side": "#2A1B25",
+      "accent": "#EDACDE",
+      "line": "#382833",
+      "syn": {
+        "k": "#E9ADE3",
+        "f": "#70D5ED",
+        "s": "#82D9B4",
+        "n": "#F7B385",
+        "t": "#CEB6FC",
+        "p": "#DDC276",
+        "c": "#937689",
+        "o": "#BDA1B3"
+      }
+    },
+    "day": {
+      "bg": "#FEF8FC",
+      "fg": "#3B2634",
+      "side": "#F9F0F6",
+      "accent": "#AB509A",
+      "line": "#FBF0F7",
+      "syn": {
+        "k": "#A752A1",
+        "f": "#008BAE",
+        "s": "#009261",
+        "n": "#B85900",
+        "t": "#865FC1",
+        "p": "#926F00",
+        "c": "#A6919E",
+        "o": "#826979"
+      }
+    }
+  },
+  {
+    "name": "Mint Chip",
+    "blurb": "Cool, crisp and suspiciously refreshing.",
+    "style": {
+      "comment": "",
+      "type": "bold",
+      "link": "underline"
+    },
+    "night": {
+      "bg": "#192B26",
+      "fg": "#E0EFEA",
+      "side": "#132420",
+      "accent": "#82D9B4",
+      "line": "#20322D",
+      "syn": {
+        "k": "#82D9B4",
+        "f": "#7BD0F9",
+        "s": "#AFD28C",
+        "n": "#FEAC9E",
+        "t": "#B7BDFF",
+        "p": "#E2BF76",
+        "c": "#64897F",
+        "o": "#91B4A9"
+      }
+    },
+    "day": {
+      "bg": "#F5FCFA",
+      "fg": "#15342D",
+      "side": "#ECF6F3",
+      "accent": "#009261",
+      "line": "#EAF7F3",
+      "syn": {
+        "k": "#009261",
+        "f": "#0085BE",
+        "s": "#59880A",
+        "n": "#C04E3E",
+        "t": "#6869CD",
+        "p": "#976C00",
+        "c": "#869F97",
+        "o": "#597A70"
+      }
+    }
+  },
+  {
+    "name": "Peach Cobbler",
+    "blurb": "Warm, golden and best served late at night.",
+    "style": {
+      "comment": "italic",
+      "type": "italic",
+      "function": "bold",
+      "parameter": "italic"
+    },
+    "night": {
+      "bg": "#31231C",
+      "fg": "#F6E8E1",
+      "side": "#2B1D16",
+      "accent": "#F7B385",
+      "line": "#392A23",
+      "syn": {
+        "k": "#E9ADE3",
+        "f": "#6BD8DE",
+        "s": "#A2D496",
+        "n": "#F4B581",
+        "t": "#E1AFED",
+        "p": "#E2BF76",
+        "c": "#98786A",
+        "o": "#C1A396"
+      }
+    },
+    "day": {
+      "bg": "#FFF9F6",
+      "fg": "#3F271D",
+      "side": "#FBF1ED",
+      "accent": "#B85900",
+      "line": "#FDF1EB",
+      "syn": {
+        "k": "#A752A1",
+        "f": "#008F9A",
+        "s": "#408C2D",
+        "n": "#B55D00",
+        "t": "#9D56AD",
+        "p": "#976C00",
+        "c": "#A99389",
+        "o": "#866B5E"
+      }
+    }
+  },
+  {
+    "name": "Blueberry Pie",
+    "blurb": "Deep blue with a sweet, jammy finish.",
+    "style": {
+      "comment": "italic",
+      "type": "bold",
+      "keyword": "italic",
+      "language": "italic"
+    },
+    "night": {
+      "bg": "#1D263A",
+      "fg": "#E5EBF8",
+      "side": "#172034",
+      "accent": "#98C7FF",
+      "line": "#242D42",
+      "syn": {
+        "k": "#E1AFED",
+        "f": "#86CDFF",
+        "s": "#78DAC0",
+        "n": "#FCAE93",
+        "t": "#BDBBFF",
+        "p": "#D8C477",
+        "c": "#73809C",
+        "o": "#9FABC5"
+      }
+    },
+    "day": {
+      "bg": "#F7FAFF",
+      "fg": "#242D42",
+      "side": "#EFF4FC",
+      "accent": "#3077CD",
+      "line": "#EEF4FE",
+      "syn": {
+        "k": "#9D56AD",
+        "f": "#0080C6",
+        "s": "#009272",
+        "n": "#BE5128",
+        "t": "#7067CB",
+        "p": "#8D7200",
+        "c": "#8F98AB",
+        "o": "#66728A"
+      }
+    }
+  },
+  {
+    "name": "Matcha Latte",
+    "blurb": "Calm greens for focused, whisked-up work.",
+    "style": {
+      "comment": "italic",
+      "language": "italic"
+    },
+    "night": {
+      "bg": "#22291F",
+      "fg": "#E6EEE2",
+      "side": "#1C2319",
+      "accent": "#A8D391",
+      "line": "#2A3026",
+      "syn": {
+        "k": "#A8D391",
+        "f": "#6BD8DE",
+        "s": "#D3C678",
+        "n": "#F9B189",
+        "t": "#F0ABD9",
+        "p": "#E6BD77",
+        "c": "#75876C",
+        "o": "#A0B198"
+      }
+    },
+    "day": {
+      "bg": "#F8FBF6",
+      "fg": "#25321E",
+      "side": "#F0F5ED",
+      "accent": "#4D8A1F",
+      "line": "#EFF6EC",
+      "syn": {
+        "k": "#4D8A1F",
+        "f": "#008F9A",
+        "s": "#8D7700",
+        "n": "#BA5702",
+        "t": "#AF4E93",
+        "p": "#9C6A00",
+        "c": "#909D8A",
+        "o": "#687760"
+      }
+    }
+  },
+  {
+    "name": "Lemon Drop",
+    "blurb": "A bright, tangy zing for sleepy mornings.",
+    "style": {
+      "comment": "italic",
+      "keyword": "bold",
+      "attribute": "italic",
+      "tag": "bold",
+      "link": "underline"
+    },
+    "night": {
+      "bg": "#29261B",
+      "fg": "#EFEBDE",
+      "side": "#232016",
+      "accent": "#D8C477",
+      "line": "#312E22",
+      "syn": {
+        "k": "#DDC276",
+        "f": "#77D2F5",
+        "s": "#8ED8A8",
+        "n": "#FCAE93",
+        "t": "#D3B4F9",
+        "p": "#C8CA7C",
+        "c": "#888062",
+        "o": "#B2AB8F"
+      }
+    },
+    "day": {
+      "bg": "#FCFAF4",
+      "fg": "#342E15",
+      "side": "#F6F4EB",
+      "accent": "#937400",
+      "line": "#F6F4E8",
+      "syn": {
+        "k": "#9A7100",
+        "f": "#0087B9",
+        "s": "#00904E",
+        "n": "#BE5128",
+        "t": "#8C5CBD",
+        "p": "#7A7A00",
+        "c": "#9E9884",
+        "o": "#797257"
+      }
+    }
+  },
+  {
+    "name": "Cotton Candy",
+    "blurb": "Spun-sugar pink and blue, light as air.",
+    "style": {
+      "comment": "italic",
+      "keyword": "italic",
+      "string": "italic",
+      "parameter": "italic",
+      "property": "italic",
+      "attribute": "italic"
+    },
+    "night": {
+      "bg": "#2C2233",
+      "fg": "#EFE8F4",
+      "side": "#261C2D",
+      "accent": "#E1AFED",
+      "line": "#33293B",
+      "syn": {
+        "k": "#E9ADE3",
+        "f": "#77D2F5",
+        "s": "#6ED9D2",
+        "n": "#EEB97B",
+        "t": "#C3B9FF",
+        "p": "#FEAAA9",
+        "c": "#887995",
+        "o": "#B3A4BE"
+      }
+    },
+    "day": {
+      "bg": "#FCF9FE",
+      "fg": "#34283D",
+      "side": "#F6F1FA",
+      "accent": "#9D56AD",
+      "line": "#F6F1FB",
+      "syn": {
+        "k": "#A752A1",
+        "f": "#0087B9",
+        "s": "#00918B",
+        "n": "#AE6300",
+        "t": "#7864C8",
+        "p": "#B45054",
+        "c": "#9E93A7",
+        "o": "#796B83"
+      }
+    }
+  },
+  {
+    "name": "Sea Glass",
+    "blurb": "Sea-worn teals and soft blues.",
+    "style": {
+      "comment": "italic",
+      "function": "italic",
+      "parameter": "italic",
+      "language": "italic"
+    },
+    "night": {
+      "bg": "#142A30",
+      "fg": "#DEEFF3",
+      "side": "#0E2429",
+      "accent": "#6BD8DE",
+      "line": "#1B3237",
+      "syn": {
+        "k": "#6BD8DE",
+        "f": "#92C9FF",
+        "s": "#95D7A2",
+        "n": "#FBB08E",
+        "t": "#C3B9FF",
+        "p": "#D8C477",
+        "c": "#618791",
+        "o": "#8FB2BB"
+      }
+    },
+    "day": {
+      "bg": "#F4FCFD",
+      "fg": "#12333A",
+      "side": "#EBF6F8",
+      "accent": "#008F9A",
+      "line": "#E9F6FA",
+      "syn": {
+        "k": "#008F9A",
+        "f": "#1A7ACB",
+        "s": "#158F44",
+        "n": "#BC541A",
+        "t": "#7864C8",
+        "p": "#8D7200",
+        "c": "#849DA4",
+        "o": "#577880"
+      }
+    }
+  },
+  {
+    "name": "Cherry Cola",
+    "blurb": "Fizzy red over a dark, sweet base.",
+    "style": {
+      "comment": "italic",
+      "keyword": "bold",
+      "function": "bold",
+      "type": "bold",
+      "language": "italic",
+      "link": "underline"
+    },
+    "night": {
+      "bg": "#31212A",
+      "fg": "#F5E7EE",
+      "side": "#2B1B24",
+      "accent": "#E5AEE8",
+      "line": "#392831",
+      "syn": {
+        "k": "#E5AEE8",
+        "f": "#6DD6E8",
+        "s": "#A8D391",
+        "n": "#F7B385",
+        "t": "#E9ADE3",
+        "p": "#E6BD77",
+        "c": "#957686",
+        "o": "#BEA1B1"
+      }
+    },
+    "day": {
+      "bg": "#FEF8FB",
+      "fg": "#3C2632",
+      "side": "#FAF0F5",
+      "accent": "#A254A7",
+      "line": "#FBF0F6",
+      "syn": {
+        "k": "#A254A7",
+        "f": "#008DA8",
+        "s": "#4D8A1F",
+        "n": "#B85900",
+        "t": "#A752A1",
+        "p": "#9C6A00",
+        "c": "#A7919C",
+        "o": "#836877"
+      }
+    }
+  }
+]
