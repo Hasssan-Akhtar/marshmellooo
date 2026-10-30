@@ -347,8 +347,35 @@ for (const preset of PRESETS) {
   }
 }
 
+// Swatch data for the sidebar flavour picker (see extension.js).
+const BLURBS = {
+  'Marshmallow': 'The original. Fluffy pink on cocoa.',
+  'Bubblegum': 'Pop a bubble, push a commit.',
+  'Mint Chip': 'Cool, crisp and suspiciously refreshing.',
+  'Peach Cobbler': 'Warm, golden and best served late at night.',
+  'Blueberry Pie': 'Deep blue with a sweet, jammy finish.',
+  'Matcha Latte': 'Calm greens for focused, whisked-up work.',
+  'Lemon Drop': 'A bright, tangy zing for sleepy mornings.',
+  'Cotton Candy': 'Spun-sugar pink and blue, light as air.',
+  'Sea Glass': 'Sea-worn teals and soft blues.',
+  'Cherry Cola': 'Fizzy red over a dark, sweet base.',
+};
+const swatch = (c) => ({
+  bg: c.editorBg, fg: c.fg, side: c.sideBg, accent: c.cursor, line: c.lineHl,
+  syn: { k: c.syn.k, f: c.syn.f, s: c.syn.s, n: c.syn.n, t: c.syn.t, p: c.syn.p, c: c.syn.c, o: c.syn.o },
+});
+const flavours = PRESETS.map((p) => ({
+  name: p.name,
+  blurb: BLURBS[p.name],
+  style: { comment: 'italic', ...STYLES[p.name] },
+  night: swatch(p.night),
+  day: swatch(p.day),
+}));
+fs.mkdirSync(path.join(root, 'media'), { recursive: true });
+fs.writeFileSync(path.join(root, 'media', 'flavours.json'), JSON.stringify(flavours, null, 2) + '\n');
+
 const pkgPath = path.join(root, 'package.json');
 const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
-pkg.contributes = { themes: contributes };
+pkg.contributes = { ...pkg.contributes, themes: contributes };
 fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n');
-console.log(`Wrote ${contributes.length} themes to themes/`);
+console.log(`Wrote ${contributes.length} themes to themes/ and swatches to media/flavours.json`);
