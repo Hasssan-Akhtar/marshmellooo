@@ -228,8 +228,14 @@
     "enum": "#865FC1",
     "type": "#865FC1",
     "typeParameter": "#865FC1",
-    "function": "#008BAE",
-    "method": "#008BAE",
+    "function": {
+      "foreground": "#008BAE",
+      "fontStyle": "bold"
+    },
+    "method": {
+      "foreground": "#008BAE",
+      "fontStyle": "bold"
+    },
     "property": "#926F00",
     "enumMember": "#B85900",
     "parameter": "#3B2634",
@@ -257,7 +263,8 @@
         "keyword.control"
       ],
       "settings": {
-        "foreground": "#A752A1"
+        "foreground": "#A752A1",
+        "fontStyle": "bold"
       }
     },
     {
@@ -268,7 +275,8 @@
         "meta.brace"
       ],
       "settings": {
-        "foreground": "#826979"
+        "foreground": "#826979",
+        "fontStyle": ""
       }
     },
     {
@@ -280,7 +288,8 @@
         "punctuation.definition.string"
       ],
       "settings": {
-        "foreground": "#009261"
+        "foreground": "#009261",
+        "fontStyle": ""
       }
     },
     {
@@ -290,7 +299,8 @@
         "constant.character.escape"
       ],
       "settings": {
-        "foreground": "#B85900"
+        "foreground": "#B85900",
+        "fontStyle": ""
       }
     },
     {
@@ -303,7 +313,8 @@
         "support.constant"
       ],
       "settings": {
-        "foreground": "#B85900"
+        "foreground": "#B85900",
+        "fontStyle": ""
       }
     },
     {
@@ -315,7 +326,8 @@
         "variable.function"
       ],
       "settings": {
-        "foreground": "#008BAE"
+        "foreground": "#008BAE",
+        "fontStyle": "bold"
       }
     },
     {
@@ -329,18 +341,29 @@
         "storage.type.primitive"
       ],
       "settings": {
-        "foreground": "#865FC1"
+        "foreground": "#865FC1",
+        "fontStyle": ""
       }
     },
     {
       "name": "Variables",
       "scope": [
         "variable",
-        "variable.other.readwrite",
+        "variable.other.readwrite"
+      ],
+      "settings": {
+        "foreground": "#3B2634",
+        "fontStyle": ""
+      }
+    },
+    {
+      "name": "Parameters",
+      "scope": [
         "variable.parameter"
       ],
       "settings": {
-        "foreground": "#3B2634"
+        "foreground": "#3B2634",
+        "fontStyle": ""
       }
     },
     {
@@ -350,7 +373,7 @@
       ],
       "settings": {
         "foreground": "#A752A1",
-        "fontStyle": "italic"
+        "fontStyle": "bold italic"
       }
     },
     {
@@ -363,7 +386,8 @@
         "support.type.property-name"
       ],
       "settings": {
-        "foreground": "#926F00"
+        "foreground": "#926F00",
+        "fontStyle": ""
       }
     },
     {
@@ -373,7 +397,8 @@
         "punctuation.definition.tag"
       ],
       "settings": {
-        "foreground": "#A752A1"
+        "foreground": "#A752A1",
+        "fontStyle": ""
       }
     },
     {
@@ -382,7 +407,20 @@
         "entity.other.attribute-name"
       ],
       "settings": {
-        "foreground": "#926F00"
+        "foreground": "#926F00",
+        "fontStyle": ""
+      }
+    },
+    {
+      "name": "Embedded links",
+      "scope": [
+        "markup.underline.link",
+        "string.other.link",
+        "constant.other.reference.link"
+      ],
+      "settings": {
+        "foreground": "#008BAE",
+        "fontStyle": "underline"
       }
     },
     {
@@ -393,7 +431,8 @@
         "entity.name.function.decorator"
       ],
       "settings": {
-        "foreground": "#865FC1"
+        "foreground": "#865FC1",
+        "fontStyle": ""
       }
     },
     {
@@ -434,16 +473,8 @@
         "markup.fenced_code"
       ],
       "settings": {
-        "foreground": "#009261"
-      }
-    },
-    {
-      "name": "Links",
-      "scope": [
-        "markup.underline.link"
-      ],
-      "settings": {
-        "foreground": "#008BAE"
+        "foreground": "#009261",
+        "fontStyle": ""
       }
     },
     {
@@ -452,7 +483,8 @@
         "markup.inserted"
       ],
       "settings": {
-        "foreground": "#009261"
+        "foreground": "#009261",
+        "fontStyle": ""
       }
     },
     {
@@ -461,7 +493,8 @@
         "markup.deleted"
       ],
       "settings": {
-        "foreground": "#A752A1"
+        "foreground": "#A752A1",
+        "fontStyle": ""
       }
     },
     {

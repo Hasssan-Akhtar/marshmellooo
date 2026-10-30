@@ -222,12 +222,30 @@
     "debugToolBar.background": "#FFFFFF"
   },
   "semanticTokenColors": {
-    "namespace": "#7067CB",
-    "class": "#7067CB",
-    "interface": "#7067CB",
-    "enum": "#7067CB",
-    "type": "#7067CB",
-    "typeParameter": "#7067CB",
+    "namespace": {
+      "foreground": "#7067CB",
+      "fontStyle": "bold"
+    },
+    "class": {
+      "foreground": "#7067CB",
+      "fontStyle": "bold"
+    },
+    "interface": {
+      "foreground": "#7067CB",
+      "fontStyle": "bold"
+    },
+    "enum": {
+      "foreground": "#7067CB",
+      "fontStyle": "bold"
+    },
+    "type": {
+      "foreground": "#7067CB",
+      "fontStyle": "bold"
+    },
+    "typeParameter": {
+      "foreground": "#7067CB",
+      "fontStyle": "bold"
+    },
     "function": "#0080C6",
     "method": "#0080C6",
     "property": "#8D7200",
@@ -257,7 +275,8 @@
         "keyword.control"
       ],
       "settings": {
-        "foreground": "#9D56AD"
+        "foreground": "#9D56AD",
+        "fontStyle": "italic"
       }
     },
     {
@@ -268,7 +287,8 @@
         "meta.brace"
       ],
       "settings": {
-        "foreground": "#66728A"
+        "foreground": "#66728A",
+        "fontStyle": ""
       }
     },
     {
@@ -280,7 +300,8 @@
         "punctuation.definition.string"
       ],
       "settings": {
-        "foreground": "#009272"
+        "foreground": "#009272",
+        "fontStyle": ""
       }
     },
     {
@@ -290,7 +311,8 @@
         "constant.character.escape"
       ],
       "settings": {
-        "foreground": "#BE5128"
+        "foreground": "#BE5128",
+        "fontStyle": ""
       }
     },
     {
@@ -303,7 +325,8 @@
         "support.constant"
       ],
       "settings": {
-        "foreground": "#BE5128"
+        "foreground": "#BE5128",
+        "fontStyle": ""
       }
     },
     {
@@ -315,7 +338,8 @@
         "variable.function"
       ],
       "settings": {
-        "foreground": "#0080C6"
+        "foreground": "#0080C6",
+        "fontStyle": ""
       }
     },
     {
@@ -329,18 +353,29 @@
         "storage.type.primitive"
       ],
       "settings": {
-        "foreground": "#7067CB"
+        "foreground": "#7067CB",
+        "fontStyle": "bold"
       }
     },
     {
       "name": "Variables",
       "scope": [
         "variable",
-        "variable.other.readwrite",
+        "variable.other.readwrite"
+      ],
+      "settings": {
+        "foreground": "#242D42",
+        "fontStyle": ""
+      }
+    },
+    {
+      "name": "Parameters",
+      "scope": [
         "variable.parameter"
       ],
       "settings": {
-        "foreground": "#242D42"
+        "foreground": "#242D42",
+        "fontStyle": ""
       }
     },
     {
@@ -363,7 +398,8 @@
         "support.type.property-name"
       ],
       "settings": {
-        "foreground": "#8D7200"
+        "foreground": "#8D7200",
+        "fontStyle": ""
       }
     },
     {
@@ -373,7 +409,8 @@
         "punctuation.definition.tag"
       ],
       "settings": {
-        "foreground": "#9D56AD"
+        "foreground": "#9D56AD",
+        "fontStyle": ""
       }
     },
     {
@@ -382,7 +419,20 @@
         "entity.other.attribute-name"
       ],
       "settings": {
-        "foreground": "#8D7200"
+        "foreground": "#8D7200",
+        "fontStyle": ""
+      }
+    },
+    {
+      "name": "Embedded links",
+      "scope": [
+        "markup.underline.link",
+        "string.other.link",
+        "constant.other.reference.link"
+      ],
+      "settings": {
+        "foreground": "#0080C6",
+        "fontStyle": ""
       }
     },
     {
@@ -393,7 +443,8 @@
         "entity.name.function.decorator"
       ],
       "settings": {
-        "foreground": "#7067CB"
+        "foreground": "#7067CB",
+        "fontStyle": ""
       }
     },
     {
@@ -434,16 +485,8 @@
         "markup.fenced_code"
       ],
       "settings": {
-        "foreground": "#009272"
-      }
-    },
-    {
-      "name": "Links",
-      "scope": [
-        "markup.underline.link"
-      ],
-      "settings": {
-        "foreground": "#0080C6"
+        "foreground": "#009272",
+        "fontStyle": ""
       }
     },
     {
@@ -452,7 +495,8 @@
         "markup.inserted"
       ],
       "settings": {
-        "foreground": "#009272"
+        "foreground": "#009272",
+        "fontStyle": ""
       }
     },
     {
@@ -461,7 +505,8 @@
         "markup.deleted"
       ],
       "settings": {
-        "foreground": "#9D56AD"
+        "foreground": "#9D56AD",
+        "fontStyle": ""
       }
     },
     {

@@ -256,48 +256,69 @@ function colors(c, dark) {
   };
 }
 
-function tokenColors(s) {
-  const rule = (name, scope, foreground, fontStyle) =>
-    ({ name, scope, settings: fontStyle ? { foreground, fontStyle } : { foreground } });
+// Each flavour's text personality: which kinds of code are italic, bold or underlined.
+// Keys left out are plain, except comments, which default to italic.
+const STYLES = {
+  'Marshmallow':   { keyword: 'italic', parameter: 'italic', language: 'italic', attribute: 'italic' },
+  'Bubblegum':     { keyword: 'bold', function: 'bold', language: 'bold italic', link: 'underline' },
+  'Mint Chip':     { comment: '', type: 'bold', link: 'underline' },
+  'Peach Cobbler': { type: 'italic', function: 'bold', parameter: 'italic' },
+  'Blueberry Pie': { type: 'bold', keyword: 'italic', language: 'italic' },
+  'Matcha Latte':  { language: 'italic' },
+  'Lemon Drop':    { keyword: 'bold', attribute: 'italic', tag: 'bold', link: 'underline' },
+  'Cotton Candy':  { keyword: 'italic', string: 'italic', parameter: 'italic', property: 'italic', attribute: 'italic' },
+  'Sea Glass':     { function: 'italic', parameter: 'italic', language: 'italic' },
+  'Cherry Cola':   { keyword: 'bold', function: 'bold', type: 'bold', language: 'italic', link: 'underline' },
+};
+
+function tokenColors(s, style) {
+  const st = { comment: 'italic', ...style };
+  // Every rule sets fontStyle explicitly ('' = plain) so specific scopes such as
+  // keyword.operator or storage.type.primitive don't inherit a parent's style.
+  const rule = (name, scope, foreground, fontStyle = '') => ({ name, scope, settings: { foreground, fontStyle } });
   return [
-    rule('Comments', ['comment', 'punctuation.definition.comment'], s.c, 'italic'),
-    rule('Keywords', ['keyword', 'storage.type', 'storage.modifier', 'keyword.control'], s.k),
+    rule('Comments', ['comment', 'punctuation.definition.comment'], s.c, st.comment),
+    rule('Keywords', ['keyword', 'storage.type', 'storage.modifier', 'keyword.control'], s.k, st.keyword),
     rule('Operators', ['keyword.operator', 'punctuation', 'meta.brace'], s.o),
-    rule('Strings', ['string', 'string.quoted', 'string.template', 'punctuation.definition.string'], s.s),
+    rule('Strings', ['string', 'string.quoted', 'string.template', 'punctuation.definition.string'], s.s, st.string),
     rule('Regex & escapes', ['string.regexp', 'constant.character.escape'], s.n),
     rule('Numbers & constants', ['constant.numeric', 'constant.language', 'constant.other', 'variable.other.constant', 'support.constant'], s.n),
-    rule('Functions', ['entity.name.function', 'support.function', 'meta.function-call entity.name.function', 'variable.function'], s.f),
-    rule('Types & classes', ['entity.name.type', 'entity.name.class', 'support.type', 'support.class', 'entity.other.inherited-class', 'storage.type.primitive'], s.t),
-    rule('Variables', ['variable', 'variable.other.readwrite', 'variable.parameter'], s.v),
-    rule('Language variables', ['variable.language'], s.k, 'italic'),
-    rule('Properties', ['variable.other.property', 'variable.other.object.property', 'support.variable.property', 'meta.object-literal.key', 'support.type.property-name'], s.p),
-    rule('Tags', ['entity.name.tag', 'punctuation.definition.tag'], s.tg),
-    rule('Attributes', ['entity.other.attribute-name'], s.at),
+    rule('Functions', ['entity.name.function', 'support.function', 'meta.function-call entity.name.function', 'variable.function'], s.f, st.function),
+    rule('Types & classes', ['entity.name.type', 'entity.name.class', 'support.type', 'support.class', 'entity.other.inherited-class', 'storage.type.primitive'], s.t, st.type),
+    rule('Variables', ['variable', 'variable.other.readwrite'], s.v),
+    rule('Parameters', ['variable.parameter'], s.v, st.parameter),
+    rule('Language variables', ['variable.language'], s.k, st.language),
+    rule('Properties', ['variable.other.property', 'variable.other.object.property', 'support.variable.property', 'meta.object-literal.key', 'support.type.property-name'], s.p, st.property),
+    rule('Tags', ['entity.name.tag', 'punctuation.definition.tag'], s.tg, st.tag),
+    rule('Attributes', ['entity.other.attribute-name'], s.at, st.attribute),
+    rule('Embedded links', ['markup.underline.link', 'string.other.link', 'constant.other.reference.link'], s.f, st.link),
     rule('Decorators', ['meta.decorator', 'punctuation.decorator', 'entity.name.function.decorator'], s.t),
     rule('Markdown headings', ['markup.heading', 'entity.name.section'], s.k, 'bold'),
     rule('Markdown bold', ['markup.bold'], s.n, 'bold'),
     rule('Markdown italic', ['markup.italic'], s.t, 'italic'),
     rule('Markdown code', ['markup.inline.raw', 'markup.fenced_code'], s.s),
-    rule('Links', ['markup.underline.link'], s.f),
     rule('Diff inserted', ['markup.inserted'], s.s),
     rule('Diff deleted', ['markup.deleted'], s.k),
     rule('Invalid', ['invalid'], s.k, 'underline'),
   ];
 }
 
-function semanticTokenColors(s) {
+// Semantic rules carry the same font style as their TextMate counterparts so
+// semantic highlighting doesn't strip a flavour's bold or italics.
+function semanticTokenColors(s, style) {
+  const tok = (foreground, fontStyle) => (fontStyle ? { foreground, fontStyle } : foreground);
   return {
-    namespace: s.t,
-    class: s.t,
-    interface: s.t,
-    enum: s.t,
-    type: s.t,
-    typeParameter: s.t,
-    function: s.f,
-    method: s.f,
-    property: s.p,
+    namespace: tok(s.t, style.type),
+    class: tok(s.t, style.type),
+    interface: tok(s.t, style.type),
+    enum: tok(s.t, style.type),
+    type: tok(s.t, style.type),
+    typeParameter: tok(s.t, style.type),
+    function: tok(s.f, style.function),
+    method: tok(s.f, style.function),
+    property: tok(s.p, style.property),
     enumMember: s.n,
-    parameter: s.v,
+    parameter: tok(s.v, style.parameter),
     'variable.readonly': s.v,
     'variable.defaultLibrary': s.n,
   };
@@ -318,8 +339,8 @@ for (const preset of PRESETS) {
       type: dark ? 'dark' : 'light',
       semanticHighlighting: true,
       colors: colors(c, dark),
-      semanticTokenColors: semanticTokenColors(c.syn),
-      tokenColors: tokenColors(c.syn),
+      semanticTokenColors: semanticTokenColors(c.syn, STYLES[preset.name]),
+      tokenColors: tokenColors(c.syn, STYLES[preset.name]),
     };
     fs.writeFileSync(path.join(themesDir, file), JSON.stringify(theme, null, 2) + '\n');
     contributes.push({ label, uiTheme: dark ? 'vs-dark' : 'vs', path: `./themes/${file}` });
