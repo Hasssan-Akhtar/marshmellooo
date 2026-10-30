@@ -1,0 +1,133 @@
+{
+  "name": "marshmallow-theme",
+  "displayName": "Marshmallow Theme",
+  "description": "Code that looks good enough to eat.",
+  "version": "0.1.0",
+  "publisher": "hassan-akhtar",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Hasssan-Akhtar/marshmellooo"
+  },
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Themes"
+  ],
+  "keywords": [
+    "theme",
+    "pastel",
+    "dark",
+    "light",
+    "marshmallow"
+  ],
+  "scripts": {
+    "build": "node scripts/build.js",
+    "package": "npm run build && npx --yes @vscode/vsce package"
+  },
+  "contributes": {
+    "themes": [
+      {
+        "label": "Marshmallow Night",
+        "uiTheme": "vs-dark",
+        "path": "./themes/marshmallow-night-color-theme.json"
+      },
+      {
+        "label": "Marshmallow Day",
+        "uiTheme": "vs",
+        "path": "./themes/marshmallow-day-color-theme.json"
+      },
+      {
+        "label": "Bubblegum Night",
+        "uiTheme": "vs-dark",
+        "path": "./themes/bubblegum-night-color-theme.json"
+      },
+      {
+        "label": "Bubblegum Day",
+        "uiTheme": "vs",
+        "path": "./themes/bubblegum-day-color-theme.json"
+      },
+      {
+        "label": "Mint Chip Night",
+        "uiTheme": "vs-dark",
+        "path": "./themes/mint-chip-night-color-theme.json"
+      },
+      {
+        "label": "Mint Chip Day",
+        "uiTheme": "vs",
+        "path": "./themes/mint-chip-day-color-theme.json"
+      },
+      {
+        "label": "Peach Cobbler Night",
+        "uiTheme": "vs-dark",
+        "path": "./themes/peach-cobbler-night-color-theme.json"
+      },
+      {
+        "label": "Peach Cobbler Day",
+        "uiTheme": "vs",
+        "path": "./themes/peach-cobbler-day-color-theme.json"
+      },
+      {
+        "label": "Blueberry Pie Night",
+        "uiTheme": "vs-dark",
+        "path": "./themes/blueberry-pie-night-color-theme.json"
+      },
+      {
+        "label": "Blueberry Pie Day",
+        "uiTheme": "vs",
+        "path": "./themes/blueberry-pie-day-color-theme.json"
+      },
+      {
+        "label": "Matcha Latte Night",
+        "uiTheme": "vs-dark",
+        "path": "./themes/matcha-latte-night-color-theme.json"
+      },
+      {
+        "label": "Matcha Latte Day",
+        "uiTheme": "vs",
+        "path": "./themes/matcha-latte-day-color-theme.json"
+      },
+      {
+        "label": "Lemon Drop Night",
+        "uiTheme": "vs-dark",
+        "path": "./themes/lemon-drop-night-color-theme.json"
+      },
+      {
+        "label": "Lemon Drop Day",
+        "uiTheme": "vs",
+        "path": "./themes/lemon-drop-day-color-theme.json"
+      },
+      {
+        "label": "Cotton Candy Night",
+        "uiTheme": "vs-dark",
+        "path": "./themes/cotton-candy-night-color-theme.json"
+      },
+      {
+        "label": "Cotton Candy Day",
+        "uiTheme": "vs",
+        "path": "./themes/cotton-candy-day-color-theme.json"
+      },
+      {
+        "label": "Sea Glass Night",
+        "uiTheme": "vs-dark",
+        "path": "./themes/sea-glass-night-color-theme.json"
+      },
+      {
+        "label": "Sea Glass Day",
+        "uiTheme": "vs",
+        "path": "./themes/sea-glass-day-color-theme.json"
+      },
+      {
+        "label": "Cherry Cola Night",
+        "uiTheme": "vs-dark",
+        "path": "./themes/cherry-cola-night-color-theme.json"
+      },
+      {
+        "label": "Cherry Cola Day",
+        "uiTheme": "vs",
+        "path": "./themes/cherry-cola-day-color-theme.json"
+      }
+    ]
+  }
+}
