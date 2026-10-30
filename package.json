@@ -2,7 +2,7 @@
   "name": "marshmallow-theme",
   "displayName": "Marshmallow Theme",
   "description": "Code that looks good enough to eat.",
-  "version": "0.2.0",
+  "version": "0.3.2",
   "publisher": "hassan-akhtar",
   "license": "MIT",
   "repository": {
@@ -27,7 +27,9 @@
     "package": "npm run build && npx --yes @vscode/vsce package"
   },
   "main": "./extension.js",
-  "activationEvents": [],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "contributes": {
     "viewsContainers": {
       "activitybar": [
@@ -49,14 +51,29 @@
     },
     "commands": [
       {
-        "command": "marshmallow.surprise",
-        "title": "Marshmallow: Surprise Me",
-        "icon": "$(sparkle)"
+        "command": "marshmallow.pick",
+        "title": "Marshmallow: Pick a Flavour",
+        "icon": "$(symbol-color)"
       },
       {
         "command": "marshmallow.toggleMode",
         "title": "Marshmallow: Toggle Night/Day",
         "icon": "$(color-mode)"
+      },
+      {
+        "command": "marshmallow.surprise",
+        "title": "Marshmallow: Surprise Me",
+        "icon": "$(sparkle)"
+      },
+      {
+        "command": "marshmallow.pinToProject",
+        "title": "Marshmallow: Pin Flavour to This Project",
+        "icon": "$(pin)"
+      },
+      {
+        "command": "marshmallow.unpinFromProject",
+        "title": "Marshmallow: Unpin Flavour from This Project",
+        "icon": "$(pinned)"
       }
     ],
     "menus": {
@@ -174,6 +191,61 @@
         "uiTheme": "vs",
         "path": "./themes/cherry-cola-day-color-theme.json"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "Marshmallow",
+      "properties": {
+        "marshmallow.personality": {
+          "type": "boolean",
+          "default": true,
+          "order": 1,
+          "markdownDescription": "Give each flavour its own cursor and spacing. Turning this off restores your previous `editor.cursor*`, `editor.lineHeight` and `editor.letterSpacing` settings."
+        },
+        "marshmallow.followTheSun": {
+          "type": "string",
+          "enum": [
+            "off",
+            "system",
+            "time"
+          ],
+          "enumDescriptions": [
+            "Never switch between Night and Day automatically.",
+            "Match your operating system's light/dark appearance.",
+            "Switch at the times set below."
+          ],
+          "default": "off",
+          "order": 2,
+          "description": "Switch the active flavour between Night and Day automatically."
+        },
+        "marshmallow.dayStartsAt": {
+          "type": "string",
+          "default": "07:00",
+          "pattern": "^([01]?\\d|2[0-3]):[0-5]\\d$",
+          "patternErrorMessage": "Use 24-hour HH:MM, e.g. 07:00",
+          "order": 3,
+          "markdownDescription": "When **Follow the Sun** is , switch to Day at this time (24-hour HH:MM)."
+        },
+        "marshmallow.nightStartsAt": {
+          "type": "string",
+          "default": "19:00",
+          "pattern": "^([01]?\\d|2[0-3]):[0-5]\\d$",
+          "patternErrorMessage": "Use 24-hour HH:MM, e.g. 19:00",
+          "order": 4,
+          "markdownDescription": "When **Follow the Sun** is , switch to Night at this time (24-hour HH:MM)."
+        },
+        "marshmallow.flavourOfTheDay": {
+          "type": "boolean",
+          "default": false,
+          "order": 5,
+          "description": "Open VS Code in a random flavour each day. Projects with a pinned flavour keep theirs."
+        },
+        "marshmallow.statusBar": {
+          "type": "boolean",
+          "default": true,
+          "order": 6,
+          "description": "Show the active flavour in the status bar. Click it to pick another."
+        }
+      }
+    }
   }
 }

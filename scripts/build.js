@@ -11,6 +11,16 @@ const themesDir = path.join(root, 'themes');
 const alpha = (hex, a) => hex.slice(0, 7) + Math.round(a * 255).toString(16).padStart(2, '0').toUpperCase();
 const slug = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
+const GUIDE_ORDER = ['k', 'f', 's', 'n', 't', 'p'];
+function rainbowGuides(syn) {
+  const out = {};
+  GUIDE_ORDER.forEach((key, i) => {
+    out[`editorIndentGuide.background${i + 1}`] = alpha(syn[key], 0.28);
+    out[`editorIndentGuide.activeBackground${i + 1}`] = alpha(syn[key], 0.85);
+  });
+  return out;
+}
+
 function colors(c, dark) {
   const t = c.term, s = c.syn;
   return {
@@ -109,8 +119,8 @@ function colors(c, dark) {
     'editorCursor.foreground': c.cursor,
     'editorLineNumber.foreground': c.lineNo,
     'editorLineNumber.activeForeground': c.lineNoActive,
-    'editorIndentGuide.background1': alpha(c.lineNo, 0.35),
-    'editorIndentGuide.activeBackground1': alpha(c.lineNo, 0.8),
+    // Rainbow indent guides: each nesting level takes the next syntax colour.
+    ...rainbowGuides(c.syn),
     'editorWhitespace.foreground': alpha(c.lineNo, 0.5),
     'editorRuler.foreground': c.rulerBorder,
     'editorLink.activeForeground': c.link,
@@ -347,6 +357,21 @@ for (const preset of PRESETS) {
   }
 }
 
+// Editor settings the extension applies alongside each flavour (see extension.js).
+// lineHeight below 8 is a multiplier of the font size.
+const PERSONALITY = {
+  'Marshmallow':   { cursorStyle: 'line', cursorWidth: 2, cursorBlinking: 'smooth', cursorSmoothCaretAnimation: 'on', lineHeight: 1.6, letterSpacing: 0 },
+  'Bubblegum':     { cursorStyle: 'line', cursorWidth: 3, cursorBlinking: 'expand', cursorSmoothCaretAnimation: 'on', lineHeight: 1.55, letterSpacing: 0.2 },
+  'Mint Chip':     { cursorStyle: 'block', cursorWidth: 2, cursorBlinking: 'solid', cursorSmoothCaretAnimation: 'off', lineHeight: 1.4, letterSpacing: 0 },
+  'Peach Cobbler': { cursorStyle: 'line', cursorWidth: 2, cursorBlinking: 'phase', cursorSmoothCaretAnimation: 'on', lineHeight: 1.65, letterSpacing: 0.2 },
+  'Blueberry Pie': { cursorStyle: 'underline', cursorWidth: 2, cursorBlinking: 'blink', cursorSmoothCaretAnimation: 'on', lineHeight: 1.5, letterSpacing: 0 },
+  'Matcha Latte':  { cursorStyle: 'line-thin', cursorWidth: 1, cursorBlinking: 'smooth', cursorSmoothCaretAnimation: 'on', lineHeight: 1.7, letterSpacing: 0.3 },
+  'Lemon Drop':    { cursorStyle: 'block-outline', cursorWidth: 2, cursorBlinking: 'blink', cursorSmoothCaretAnimation: 'on', lineHeight: 1.5, letterSpacing: 0.1 },
+  'Cotton Candy':  { cursorStyle: 'line', cursorWidth: 2, cursorBlinking: 'expand', cursorSmoothCaretAnimation: 'on', lineHeight: 1.8, letterSpacing: 0.5 },
+  'Sea Glass':     { cursorStyle: 'line', cursorWidth: 2, cursorBlinking: 'smooth', cursorSmoothCaretAnimation: 'on', lineHeight: 1.65, letterSpacing: 0.2 },
+  'Cherry Cola':   { cursorStyle: 'underline-thin', cursorWidth: 2, cursorBlinking: 'phase', cursorSmoothCaretAnimation: 'on', lineHeight: 1.5, letterSpacing: 0 },
+};
+
 // Swatch data for the sidebar flavour picker (see extension.js).
 const BLURBS = {
   'Marshmallow': 'The original. Fluffy pink on cocoa.',
@@ -368,6 +393,7 @@ const flavours = PRESETS.map((p) => ({
   name: p.name,
   blurb: BLURBS[p.name],
   style: { comment: 'italic', ...STYLES[p.name] },
+  personality: PERSONALITY[p.name],
   night: swatch(p.night),
   day: swatch(p.day),
 }));
