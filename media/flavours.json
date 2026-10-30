@@ -9,6 +9,14 @@
       "language": "italic",
       "attribute": "italic"
     },
+    "personality": {
+      "cursorStyle": "line",
+      "cursorWidth": 2,
+      "cursorBlinking": "smooth",
+      "cursorSmoothCaretAnimation": "on",
+      "lineHeight": 1.6,
+      "letterSpacing": 0
+    },
     "night": {
       "bg": "#2B2838",
       "fg": "#EDE6F5",
@@ -54,6 +62,14 @@
       "language": "bold italic",
       "link": "underline"
     },
+    "personality": {
+      "cursorStyle": "line",
+      "cursorWidth": 3,
+      "cursorBlinking": "expand",
+      "cursorSmoothCaretAnimation": "on",
+      "lineHeight": 1.55,
+      "letterSpacing": 0.2
+    },
     "night": {
       "bg": "#31212B",
       "fg": "#F4E7EF",
@@ -96,6 +112,14 @@
       "comment": "",
       "type": "bold",
       "link": "underline"
+    },
+    "personality": {
+      "cursorStyle": "block",
+      "cursorWidth": 2,
+      "cursorBlinking": "solid",
+      "cursorSmoothCaretAnimation": "off",
+      "lineHeight": 1.4,
+      "letterSpacing": 0
     },
     "night": {
       "bg": "#192B26",
@@ -141,6 +165,14 @@
       "function": "bold",
       "parameter": "italic"
     },
+    "personality": {
+      "cursorStyle": "line",
+      "cursorWidth": 2,
+      "cursorBlinking": "phase",
+      "cursorSmoothCaretAnimation": "on",
+      "lineHeight": 1.65,
+      "letterSpacing": 0.2
+    },
     "night": {
       "bg": "#31231C",
       "fg": "#F6E8E1",
@@ -185,6 +217,14 @@
       "keyword": "italic",
       "language": "italic"
     },
+    "personality": {
+      "cursorStyle": "underline",
+      "cursorWidth": 2,
+      "cursorBlinking": "blink",
+      "cursorSmoothCaretAnimation": "on",
+      "lineHeight": 1.5,
+      "letterSpacing": 0
+    },
     "night": {
       "bg": "#1D263A",
       "fg": "#E5EBF8",
@@ -226,6 +266,14 @@
     "style": {
       "comment": "italic",
       "language": "italic"
+    },
+    "personality": {
+      "cursorStyle": "line-thin",
+      "cursorWidth": 1,
+      "cursorBlinking": "smooth",
+      "cursorSmoothCaretAnimation": "on",
+      "lineHeight": 1.7,
+      "letterSpacing": 0.3
     },
     "night": {
       "bg": "#22291F",
@@ -271,6 +319,14 @@
       "attribute": "italic",
       "tag": "bold",
       "link": "underline"
+    },
+    "personality": {
+      "cursorStyle": "block-outline",
+      "cursorWidth": 2,
+      "cursorBlinking": "blink",
+      "cursorSmoothCaretAnimation": "on",
+      "lineHeight": 1.5,
+      "letterSpacing": 0.1
     },
     "night": {
       "bg": "#29261B",
@@ -318,6 +374,14 @@
       "property": "italic",
       "attribute": "italic"
     },
+    "personality": {
+      "cursorStyle": "line",
+      "cursorWidth": 2,
+      "cursorBlinking": "expand",
+      "cursorSmoothCaretAnimation": "on",
+      "lineHeight": 1.8,
+      "letterSpacing": 0.5
+    },
     "night": {
       "bg": "#2C2233",
       "fg": "#EFE8F4",
@@ -361,6 +425,14 @@
       "function": "italic",
       "parameter": "italic",
       "language": "italic"
+    },
+    "personality": {
+      "cursorStyle": "line",
+      "cursorWidth": 2,
+      "cursorBlinking": "smooth",
+      "cursorSmoothCaretAnimation": "on",
+      "lineHeight": 1.65,
+      "letterSpacing": 0.2
     },
     "night": {
       "bg": "#142A30",
@@ -407,6 +479,14 @@
       "type": "bold",
       "language": "italic",
       "link": "underline"
+    },
+    "personality": {
+      "cursorStyle": "underline-thin",
+      "cursorWidth": 2,
+      "cursorBlinking": "phase",
+      "cursorSmoothCaretAnimation": "on",
+      "lineHeight": 1.5,
+      "letterSpacing": 0
     },
     "night": {
       "bg": "#31212A",
