@@ -1,8 +1,21 @@
 # Marshmallow Theme
 
-Soft pastel syntax on a cocoa-dark or cream-light canvas. Ten flavours, each in a **Night** (dark) and **Day** (light) variant:
+*Code that looks good enough to eat.*
 
-Marshmallow · Bubblegum · Mint Chip · Peach Cobbler · Blueberry Pie · Matcha Latte · Lemon Drop · Cotton Candy · Sea Glass · Cherry Cola
+Soft pastel syntax on a cocoa-dark or cream-light canvas. Every flavour comes in **Night** (for when the snacks come out) and **Day** (fresh out of the oven).
+
+| Flavour | |
+|---|---|
+| **Marshmallow** | The original. Fluffy pink on cocoa. |
+| **Bubblegum** | Pop a bubble, push a commit. |
+| **Mint Chip** | Cool, crisp and suspiciously refreshing. |
+| **Peach Cobbler** | Warm, golden and best served late at night. |
+| **Blueberry Pie** | Deep blue with a sweet, jammy finish. |
+| **Matcha Latte** | Calm greens for focused, whisked-up work. |
+| **Lemon Drop** | A bright, tangy zing for sleepy mornings. |
+| **Cotton Candy** | Spun-sugar pink and blue, light as air. |
+| **Sea Glass** | Sea-worn teals and soft blues. |
+| **Cherry Cola** | Fizzy red over a dark, sweet base. |
 
 ## Install locally
 
