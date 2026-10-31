@@ -1,9 +1,10 @@
 // Marshmallow extension: the Flavours sidebar, status bar picker, per-flavour
 // personality (cursor and spacing), project pins, Follow the Sun and
-// Flavour of the Day.
+// Flavour of the Day, and custom flavours made in the sidebar.
 const vscode = require('vscode');
 const crypto = require('crypto');
-const flavours = require('./media/flavours.json');
+const builtIns = require('./media/flavours.json');
+const { ok, themeFor, STYLES, BASES, ACCENTS, customPalettes, customFlavour, slotName, DEFAULT_CUSTOM } = require('./lib/theme');
 
 const THEME_KEY = 'workbench.colorTheme';
 const DARK_KEY = 'workbench.preferredDarkColorTheme';
@@ -16,12 +17,32 @@ const { Global, Workspace } = vscode.ConfigurationTarget;
 const config = () => vscode.workspace.getConfiguration();
 const setting = (key) => vscode.workspace.getConfiguration('marshmallow').get(key);
 const label = (name, mode) => `${name} ${MODES[mode]}`;
-const byName = (name) => flavours.find((f) => f.name === name);
+const CUSTOM_SLOTS = [1, 2, 3];
+const CUSTOM_KEYS = {
+  colors: 'workbench.colorCustomizations',
+  tokens: 'editor.tokenColorCustomizations',
+  semantic: 'editor.semanticTokenColorCustomizations',
+};
+
+// Saved custom flavour specs by slot, loaded from globalState in activate().
+let customs = {};
+let globalState;
+let trying = null; // the live try-on in progress, see "Live try-on" below
+const allFlavours = () => {
+  const saved = CUSTOM_SLOTS.filter((n) => customs[n]).map((n) => customFlavour(customs[n]));
+  // A brand-new flavour being tried on isn't saved yet, but VS Code is showing it.
+  if (trying?.isNew && trying.spec) saved.push({ ...customFlavour(trying.spec), trying: true });
+  return builtIns.concat(saved);
+};
+const byName = (name) => allFlavours().find((f) => f.name === name);
+// What people see: a custom flavour's own name rather than its slot.
+const title = (name) => byName(name)?.display || name;
+const titled = (name, mode) => `${title(name)} ${MODES[mode]}`;
 const hasWorkspace = () => !!vscode.workspace.workspaceFolders?.length;
 
 // Returns { name, mode } when the label is one of ours, else null.
 function parseTheme(text) {
-  for (const f of flavours) {
+  for (const f of allFlavours()) {
     for (const mode of Object.keys(MODES)) {
       if (text === label(f.name, mode)) return { name: f.name, mode };
     }
@@ -173,7 +194,7 @@ async function flavourOfTheDay(state) {
   await state.update('flavourOfTheDay', today);
   const active = activeFlavour();
   const mode = setting('followTheSun') === 'time' ? modeForNow() : active ? active.mode : 'night';
-  const others = flavours.filter((f) => !active || f.name !== active.name);
+  const others = builtIns.filter((f) => !active || f.name !== active.name);
   const pick = others[Math.floor(Math.random() * others.length)];
   await applyFlavour(pick.name, mode);
   vscode.window.showInformationMessage(`🍡 Today's flavour: ${pick.name}. ${pick.blurb}`);
@@ -192,7 +213,7 @@ class StatusBar {
     const active = activeFlavour();
     if (!setting('statusBar') || !active) return this.item.hide();
     const pinned = pinnedFlavour();
-    this.item.text = `🍡 ${label(active.name, active.mode)}${pinned ? ' $(pin)' : ''}`;
+    this.item.text = `🍡 ${titled(active.name, active.mode)}${pinned ? ' $(pin)' : ''}`;
     this.item.tooltip = `${byName(active.name).blurb}${pinned ? '\nPinned to this project.' : ''}\nClick to pick another flavour.`;
     this.item.show();
   }
@@ -207,9 +228,9 @@ async function pickFlavour() {
   const items = [];
   for (const mode of Object.keys(MODES)) {
     items.push({ label: MODES[mode], kind: vscode.QuickPickItemKind.Separator });
-    for (const f of flavours) {
+    for (const f of allFlavours()) {
       const on = active && active.name === f.name && active.mode === mode;
-      items.push({ label: `${on ? '$(check) ' : ''}${label(f.name, mode)}`, description: f.blurb, name: f.name, mode });
+      items.push({ label: `${on ? '$(check) ' : ''}${titled(f.name, mode)}`, description: f.blurb, name: f.name, mode });
     }
   }
   const choice = await vscode.window.showQuickPick(items, { placeHolder: 'Pick a Marshmallow flavour', matchOnDescription: true });
@@ -235,7 +256,26 @@ class FlavourView {
       if (msg.type === 'pin') vscode.commands.executeCommand('marshmallow.pinToProject');
       if (msg.type === 'unpin') vscode.commands.executeCommand('marshmallow.unpinFromProject');
       if (msg.type === 'setting') vscode.workspace.getConfiguration('marshmallow').update(msg.key, msg.value, Global);
+      if (msg.type === 'preview') {
+        view.webview.postMessage({ type: 'preview', flavour: customFlavour({ ...msg.spec, slot: 0 }) });
+        tryOn(msg.spec, this.currentMode());
+      }
+      if (msg.type === 'cancel') endTryOn(false);
+      if (msg.type === 'save') saveCustom(msg.spec, this.currentMode());
+      if (msg.type === 'delete') deleteCustom(msg.slot);
     });
+    // The builder's draft lives in the webview, so hiding the panel abandons it.
+    view.onDidChangeVisibility(() => {
+      if (!view.visible) endTryOn(false);
+    });
+    view.onDidDispose(() => {
+      endTryOn(false);
+    });
+  }
+
+  // The mode actually showing, falling back to the panel's switch.
+  currentMode() {
+    return activeFlavour()?.mode ?? this.mode;
   }
 
   state() {
@@ -243,6 +283,8 @@ class FlavourView {
     if (active) this.mode = active.mode;
     const m = vscode.workspace.getConfiguration('marshmallow');
     return {
+      flavours: allFlavours(),
+      freeSlot: CUSTOM_SLOTS.find((n) => !customs[n]) ?? null,
       mode: this.mode,
       active: active && active.name,
       pinned: !!pinnedFlavour(),
@@ -274,7 +316,7 @@ class FlavourView {
 
   surprise() {
     const active = activeFlavour();
-    const others = flavours.filter((f) => !active || f.name !== active.name);
+    const others = allFlavours().filter((f) => !active || f.name !== active.name);
     const pick = others[Math.floor(Math.random() * others.length)];
     applyFlavour(pick.name, this.mode);
   }
@@ -282,7 +324,7 @@ class FlavourView {
   html() {
     const nonce = crypto.randomBytes(16).toString('base64');
     const cspSource = this.view.webview.cspSource;
-    const init = { ...this.state(), flavours };
+    const init = { ...this.state(), builder: builderOptions() };
     return /* html */ `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -327,6 +369,26 @@ class FlavourView {
   .seg { display: flex; gap: 2px; padding: 2px; margin-top: 5px; border-radius: 999px; background: var(--x-off); }
   .seg button { flex: 1; border: 0; padding: 4px 0; border-radius: 999px; cursor: pointer; font: inherit; font-size: 11px; color: var(--vscode-foreground); background: transparent; }
   .seg button[aria-checked=true] { background: var(--x-on); color: var(--x-on-fg); }
+  .item { position: relative; }
+  .item.custom .head { padding-right: 34px; }
+  .edit { position: absolute; top: 4px; right: 4px; width: 24px; height: 22px; border: 0; border-radius: 6px; cursor: pointer; font: inherit; background: transparent; color: inherit; opacity: .8; }
+  .edit:hover { opacity: 1; background: rgba(127,127,127,.25); }
+  .make { display: block; width: 100%; margin: 8px 0 4px; padding: 7px 8px; text-align: left; font: inherit; cursor: pointer; border-radius: 8px; color: var(--vscode-foreground); background: transparent; border: 1px dashed var(--vscode-descriptionForeground); }
+  .make:hover { border-style: solid; }
+  .make.full { cursor: default; opacity: .6; border-style: dashed; }
+  .builder { border: 2px solid var(--accent); border-radius: 8px; padding: 10px; margin: 8px 0; }
+  .b-head { font-weight: 600; }
+  .b-lab { display: block; font-size: 11px; opacity: .75; margin: 10px 0 5px; }
+  .dots { display: flex; gap: 6px; flex-wrap: wrap; }
+  .sw-dot { width: 18px; height: 18px; border-radius: 50%; border: 0; padding: 0; cursor: pointer; box-shadow: inset 0 0 0 1px rgba(127,127,127,.35); }
+  .sw-dot[aria-pressed=true] { outline: 2px solid currentColor; outline-offset: 2px; }
+  .builder input, .builder select { width: 100%; box-sizing: border-box; font: inherit; color: inherit; background: var(--line); border: 1px solid rgba(127,127,127,.35); border-radius: 6px; padding: 5px 8px; }
+  .builder .seg { background: var(--line); }
+  .builder .seg button { color: inherit; }
+  .builder .seg button[aria-checked=true] { background: var(--accent); color: var(--bg); }
+  .b-actions { display: flex; gap: 6px; margin-top: 10px; align-items: center; }
+  .b-actions button { border: 1px solid rgba(127,127,127,.4); background: transparent; color: inherit; border-radius: 999px; padding: 4px 10px; font: inherit; font-size: 11px; cursor: pointer; }
+  .b-actions .primary { background: var(--accent); color: var(--bg); border-color: var(--accent); }
 </style>
 </head>
 <body>
@@ -379,6 +441,57 @@ class FlavourView {
       '</div>';
   }
 
+  // ---- Make your own --------------------------------------------------------
+  let draft = null, draftPreview = null;
+  const named = (f) => f.display || f.name;
+
+  function openBuilder(spec) {
+    draft = spec ? { ...spec } : { ...state.builder.defaults, display: '' };
+    draftPreview = null;
+    vscode.postMessage({ type: 'preview', spec: draft });
+    render();
+  }
+  // A random take on every choice except the name.
+  const any = (list) => list[Math.floor(Math.random() * list.length)];
+  function shuffled() {
+    const b = state.builder;
+    return {
+      base: any(b.bases).hue,
+      accent: any(b.accents).hue,
+      sweetness: any(['subtle', 'sweet', 'rush']),
+      like: any(b.likes),
+      order: [0, 1, 2, 3, 4].sort(() => Math.random() - 0.5),
+    };
+  }
+  const updateDraft = (change) => { Object.assign(draft, change); vscode.postMessage({ type: 'preview', spec: draft }); };
+
+  function builderHtml() {
+    if (!draftPreview) return '<div class="builder" style="--accent:var(--vscode-focusBorder)">Mixing your flavour…</div>';
+    const f = draftPreview, c = f[state.mode], b = state.builder;
+    const dots = (list, key) => list.map((o) => '<button class="sw-dot" data-pick="' + key + '" data-hue="' + o.hue + '"' +
+      ' aria-label="' + key + ' colour" aria-pressed="' + (draft[key] === o.hue) + '" style="background:' + o[state.mode] + '"></button>').join('');
+    const sweet = [['subtle', 'Subtle'], ['sweet', 'Sweet'], ['rush', 'Sugar rush']].map(([v, t]) =>
+      '<button role="radio" data-sweet="' + v + '" aria-checked="' + (draft.sweetness === v) + '">' + t + '</button>').join('');
+    const likes = b.likes.map((n) => '<option' + (n === draft.like ? ' selected' : '') + '>' + esc(n) + '</option>').join('');
+    return '<div class="builder" style="background:' + c.bg + ';color:' + c.fg + ';--accent:' + c.accent + ';--bg:' + c.bg + ';--line:' + c.line + '">' +
+      '<div class="b-head"><span style="color:' + c.accent + '">✦</span> ' + (draft.slot ? 'Edit your flavour' : 'Make your own') + '</div>' +
+      '<label class="b-lab" for="b-name">Name</label><input id="b-name" maxlength="40" placeholder="Hot Cocoa" value="' + esc(draft.display || '') + '">' +
+      '<div class="b-lab">Base</div><div class="dots">' + dots(b.bases, 'base') + '</div>' +
+      '<div class="b-lab">Accent</div><div class="dots">' + dots(b.accents, 'accent') + '</div>' +
+      '<div class="b-lab">Sweetness</div><div class="seg" role="radiogroup" aria-label="Sweetness">' + sweet + '</div>' +
+      '<label class="b-lab" for="b-like">Text style and cursor like</label><select id="b-like">' + likes + '</select>' +
+      '<div class="code" style="background:' + c.line + ';border-radius:6px;margin-top:10px">' + preview(f, c) + '</div>' +
+      '<div class="b-actions"><button data-b="shuffle" title="Surprise me: random colours, sweetness and style">🎲 Shuffle</button>' +
+      (draft.slot ? '<button data-b="delete">Delete</button>' : '') +
+      '<span style="flex:1"></span><button data-b="cancel">Cancel</button><button data-b="save" class="primary">Save</button></div></div>';
+  }
+
+  function makeRow() {
+    if (draft && !draft.slot) return builderHtml();
+    if (state.freeSlot) return '<button class="make" data-b="new">✦ Make your own flavour</button>';
+    return '<div class="make full">All 3 custom slots are used. Edit or delete one to make another.</div>';
+  }
+
   function render() {
     const followOS = state.settings.followTheSun === 'system';
     for (const b of document.querySelectorAll('.modes button')) {
@@ -395,23 +508,42 @@ class FlavourView {
     }
     // Only the active flavour is expanded; the rest are slim rows with a colour strip.
     document.getElementById('list').innerHTML = state.flavours.map((f) => {
+      if (f.trying) return '';
+      if (draft && f.custom && draft.slot === f.custom.slot) return builderHtml();
       const c = f[state.mode], on = f.name === state.active;
       const chips = ['k', 'f', 's', 'n', 't', 'p'].map((k) => '<i style="background:' + c.syn[k] + '"></i>').join('');
-      return '<div class="item' + (on ? ' active' : '') + '" style="--accent:' + c.accent + '">' +
+      return '<div class="item' + (on ? ' active' : '') + (f.custom ? ' custom' : '') + '" style="--accent:' + c.accent + '">' +
         '<button class="card' + (on ? ' active' : '') + '" data-name="' + esc(f.name) + '"' +
-        ' title="' + esc(f.name + ': ' + f.blurb) + '" aria-pressed="' + on + '"' +
+        ' title="' + esc(named(f) + ': ' + f.blurb) + '" aria-pressed="' + on + '"' +
         ' style="background:' + c.bg + ';color:' + c.fg + '">' +
         '<div class="head"><span class="dot" style="background:' + c.accent + '"></span>' +
-        '<span class="name">' + esc(f.name) + '</span>' +
+        '<span class="name">' + esc(named(f)) + '</span>' +
         (on ? '<span class="tick" style="background:' + c.accent + ';color:' + c.bg + '">Active</span>'
             : '<span class="chips">' + chips + '</span>') + '</div>' +
         (on ? '<div class="code" style="background:' + c.line + '">' + preview(f, c) + '</div>' +
               '<div class="foot">' + esc(f.blurb) + '</div>' : '') +
-        '</button>' + (on ? pinBar(c) : '') + '</div>';
-    }).join('');
+        '</button>' +
+        (f.custom ? '<button class="edit" data-edit="' + f.custom.slot + '" title="Edit ' + esc(named(f)) + '" aria-label="Edit ' + esc(named(f)) + '" style="color:' + c.fg + '">✎</button>' : '') +
+        (on ? pinBar(c) : '') + '</div>';
+    }).join('') + makeRow();
   }
 
   document.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-b]');
+    if (b) {
+      const act = b.dataset.b;
+      if (act === 'new') return openBuilder();
+      if (act === 'shuffle') return updateDraft(shuffled());
+      if (act === 'cancel') { vscode.postMessage({ type: 'cancel' }); draft = null; return render(); }
+      if (act === 'delete') { vscode.postMessage({ type: 'delete', slot: draft.slot }); draft = null; return render(); }
+      if (act === 'save') { vscode.postMessage({ type: 'save', spec: draft }); draft = null; return render(); }
+    }
+    const pick = e.target.closest('[data-pick]');
+    if (pick) return updateDraft({ [pick.dataset.pick]: Number(pick.dataset.hue) });
+    const sweet = e.target.closest('[data-sweet]');
+    if (sweet) return updateDraft({ sweetness: sweet.dataset.sweet });
+    const edit = e.target.closest('[data-edit]');
+    if (edit) return openBuilder(state.flavours.find((f) => f.custom && f.custom.slot === Number(edit.dataset.edit)).custom);
     const mode = e.target.closest('[data-mode]');
     if (mode) return vscode.postMessage({ type: 'mode', mode: mode.dataset.mode });
     const toggle = e.target.closest('[data-toggle]');
@@ -427,14 +559,159 @@ class FlavourView {
   const extras = document.getElementById('extras');
   extras.open = !!vscode.getState()?.extras;
   extras.addEventListener('toggle', () => vscode.setState({ extras: extras.open }));
+  document.addEventListener('input', (e) => {
+    if (e.target.id === 'b-name' && draft) draft.display = e.target.value;
+  });
+  document.addEventListener('change', (e) => {
+    if (e.target.id === 'b-like' && draft) updateDraft({ like: e.target.value });
+  });
   window.addEventListener('message', (e) => {
     if (e.data.type === 'state') { const { type, ...rest } = e.data; state = { ...state, ...rest }; render(); }
+    if (e.data.type === 'preview' && draft) { draftPreview = e.data.flavour; render(); }
   });
   render();
 </script>
 </body>
 </html>`;
   }
+}
+
+// ---- Custom flavours ------------------------------------------------------
+// Each custom flavour lives in one of the "Marshmallow Custom N" theme slots.
+// Its colours go into the user's theme-scoped colour customizations, which
+// VS Code applies whenever that slot's theme is active.
+
+// Swatches for the builder's base and accent pickers, in both modes.
+function builderOptions() {
+  return {
+    bases: BASES.map((hue) => ({ hue, night: ok(0.27, 0.03, hue), day: ok(0.95, 0.03, hue) })),
+    accents: ACCENTS.map((hue) => ({ hue, night: ok(0.82, 0.1, hue), day: ok(0.57, 0.15, hue) })),
+    likes: Object.keys(STYLES),
+    defaults: DEFAULT_CUSTOM,
+  };
+}
+
+async function writeCustomizations(spec) {
+  const palettes = customPalettes(spec);
+  const next = {};
+  for (const [kind, key] of Object.entries(CUSTOM_KEYS)) next[kind] = { ...(config().inspect(key)?.globalValue || {}) };
+  for (const mode of Object.keys(MODES)) {
+    const t = themeFor(palettes[mode], mode === 'night', STYLES[spec.like]);
+    const scope = `[${label(slotName(spec.slot), mode)}]`;
+    next.colors[scope] = t.colors;
+    next.tokens[scope] = { textMateRules: t.tokenColors };
+    next.semantic[scope] = { enabled: true, rules: t.semanticTokenColors };
+  }
+  for (const [kind, key] of Object.entries(CUSTOM_KEYS)) await config().update(key, next[kind], Global);
+}
+
+async function clearCustomizations(slot) {
+  for (const key of Object.values(CUSTOM_KEYS)) {
+    const value = { ...(config().inspect(key)?.globalValue || {}) };
+    for (const mode of Object.keys(MODES)) delete value[`[${label(slotName(slot), mode)}]`];
+    await config().update(key, Object.keys(value).length ? value : undefined, Global);
+  }
+}
+
+async function storeCustoms() {
+  await globalState.update('customs', customs);
+}
+
+function cleanSpec(spec, slot) {
+  return {
+    slot,
+    display: String(spec.display || '').trim().slice(0, 40) || `My Flavour ${slot}`,
+    base: Number(spec.base),
+    accent: Number(spec.accent),
+    sweetness: spec.sweetness,
+    like: STYLES[spec.like] ? spec.like : DEFAULT_CUSTOM.like,
+    order: spec.order,
+  };
+}
+
+async function saveCustom(spec, mode) {
+  const slot = spec.slot || trying?.slot || CUSTOM_SLOTS.find((n) => !customs[n]);
+  await endTryOn(true);
+  if (!slot) return vscode.window.showWarningMessage('All three custom slots are used. Delete one to make another.');
+  const clean = cleanSpec(spec, slot);
+  customs = { ...customs, [slot]: clean };
+  await storeCustoms();
+  await writeCustomizations(clean);
+  await applyFlavour(slotName(slot), mode);
+  vscode.commands.executeCommand('marshmallow.refresh');
+}
+
+async function deleteCustom(slot) {
+  const spec = customs[slot];
+  if (!spec) return;
+  await endTryOn(false);
+  const ok = await vscode.window.showWarningMessage(`Delete your flavour "${spec.display}"?`, { modal: true }, 'Delete');
+  if (ok !== 'Delete') return;
+  // Move off the slot first so VS Code isn't left on a theme we're clearing.
+  const active = activeFlavour();
+  if (active && active.name === slotName(slot)) await applyFlavour('Marshmallow', active.mode);
+  const { [slot]: _removed, ...rest } = customs;
+  customs = rest;
+  await storeCustoms();
+  await clearCustomizations(slot);
+  vscode.commands.executeCommand('marshmallow.refresh');
+}
+
+// ---- Live try-on ------------------------------------------------------------
+// While the builder is open, each change is written into the flavour's slot and
+// applied, so the whole editor shows it. Cancel puts back the theme settings
+// and slot colours from before; the record is kept in globalState so a try-on
+// interrupted by closing VS Code is undone on the next start.
+
+let queue = Promise.resolve();
+let pending = null;
+let timer = null;
+const serial = (fn) => (queue = queue.then(fn, fn));
+
+// Coalesces quick clicks into one write.
+function tryOn(spec, mode) {
+  pending = { spec, mode };
+  clearTimeout(timer);
+  timer = setTimeout(() => serial(async () => {
+    const next = pending;
+    pending = null;
+    if (next) await tryOnNow(next.spec, next.mode);
+  }), 120);
+}
+
+async function tryOnNow(spec, mode) {
+  if (!trying) {
+    const slot = spec.slot || CUSTOM_SLOTS.find((n) => !customs[n]);
+    if (!slot) return;
+    const target = pinnedFlavour() ? Workspace : Global;
+    const previous = {};
+    for (const key of [THEME_KEY, DARK_KEY, LIGHT_KEY]) {
+      const info = config().inspect(key);
+      previous[key] = target === Workspace ? info?.workspaceValue : info?.globalValue;
+    }
+    trying = { slot, isNew: !customs[slot], target, previous };
+  }
+  trying.spec = cleanSpec(spec, trying.slot);
+  await globalState.update('tryingOn', trying);
+  await writeCustomizations(trying.spec);
+  await applyFlavour(slotName(trying.slot), mode, trying.target);
+  vscode.commands.executeCommand('marshmallow.refresh');
+}
+
+// Ends a try-on. With keep false, puts back what was there before it started.
+async function endTryOn(keep) {
+  clearTimeout(timer);
+  pending = null;
+  await queue;
+  const t = trying || globalState.get('tryingOn');
+  trying = null;
+  if (!t) return;
+  await globalState.update('tryingOn', undefined);
+  if (keep) return;
+  if (customs[t.slot]) await writeCustomizations(customs[t.slot]);
+  else await clearCustomizations(t.slot);
+  for (const [key, value] of Object.entries(t.previous)) await put(key, value, t.target);
+  vscode.commands.executeCommand('marshmallow.refresh');
 }
 
 // ---- Wiring ---------------------------------------------------------------
@@ -456,6 +733,9 @@ async function unpinFromProject() {
 
 async function activate(context) {
   const state = context.globalState;
+  globalState = state;
+  customs = state.get('customs') || {};
+  await endTryOn(false);
   const personality = new Personality(state);
   const sun = new FollowTheSun(state);
   const status = new StatusBar();
@@ -471,6 +751,7 @@ async function activate(context) {
     sun,
     vscode.window.registerWebviewViewProvider('marshmallow.flavours', view),
     vscode.commands.registerCommand('marshmallow.pick', pickFlavour),
+    vscode.commands.registerCommand('marshmallow.refresh', refresh),
     vscode.commands.registerCommand('marshmallow.toggleMode', () => view.toggleMode()),
     vscode.commands.registerCommand('marshmallow.surprise', () => view.surprise()),
     vscode.commands.registerCommand('marshmallow.pinToProject', pinToProject),

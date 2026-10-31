@@ -25,6 +25,12 @@ Click the marshmallow icon in the activity bar to open the **Flavours** panel. E
 
 You can also click the 🍡 flavour name in the status bar, or run **Marshmallow: Pick a Flavour**, for a quick picker.
 
+## Make your own flavour
+
+Click **✦ Make your own flavour** at the bottom of the list. Name it, pick a base and an accent, choose how sweet the syntax colours are (Subtle, Sweet or Sugar rush), and borrow the text style and cursor of any built-in flavour. While the builder is open, the whole editor shows your flavour live as you change it; **Cancel** puts back what you had and **Save** keeps it. 🎲 Shuffle rolls a random base, accent, sweetness and style (keeping your name). Save it and it joins the list, in both Night and Day, with an ✎ button to edit or delete it.
+
+You can keep up to three. They live in the **Marshmallow Custom 1–3** theme slots, and their colours are stored as theme-scoped `workbench.colorCustomizations`, `editor.tokenColorCustomizations` and `editor.semanticTokenColorCustomizations` in your user settings. Deleting a flavour removes only its own entries.
+
 ## Extras
 
 All of these live in **Settings → Marshmallow** and at the bottom of the Flavours panel.
@@ -40,7 +46,7 @@ All of these live in **Settings → Marshmallow** and at the bottom of the Flavo
 
 ```bash
 npm run package
-code --install-extension marshmallow-theme-0.3.2.vsix
+code --install-extension marshmallow-theme-0.4.2.vsix
 ```
 
 Then pick a theme with **Preferences: Color Theme** (`Cmd+K Cmd+T`).
@@ -49,7 +55,8 @@ Then pick a theme with **Preferences: Color Theme** (`Cmd+K Cmd+T`).
 
 The theme files in `themes/` are generated, so don't edit them by hand.
 
-- `scripts/palettes.js` holds the palettes from the original design. Marshmallow is hand-tuned; the other flavours come from an OKLCH formula driven by `PRESET_SPECS`.
-- `scripts/build.js` maps each palette onto VS Code colour keys and token scopes. `STYLES` at the top of the token section sets each flavour's italic/bold/underline choices.
+- `lib/palettes.js` holds the palettes from the original design. Marshmallow is hand-tuned; the other flavours come from an OKLCH formula driven by `PRESET_SPECS`.
+- `lib/theme.js` maps a palette onto VS Code colour keys and token scopes. `STYLES` sets each flavour's italic/bold/underline choices and `PERSONALITY` its cursor and spacing. The extension uses the same code to build custom flavours.
+- `scripts/build.js` writes the theme files from those two.
 
-After changing either file, run `npm run build`. It also regenerates `media/flavours.json`, which the flavour picker in `extension.js` reads.
+After changing any of them, run `npm run build`. It also regenerates `media/flavours.json`, which the flavour picker in `extension.js` reads.

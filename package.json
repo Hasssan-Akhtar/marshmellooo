@@ -2,7 +2,7 @@
   "name": "marshmallow-theme",
   "displayName": "Marshmallow Theme",
   "description": "Code that looks good enough to eat.",
-  "version": "0.3.2",
+  "version": "0.4.2",
   "publisher": "hassan-akhtar",
   "license": "MIT",
   "repository": {
@@ -190,6 +190,36 @@
         "label": "Cherry Cola Day",
         "uiTheme": "vs",
         "path": "./themes/cherry-cola-day-color-theme.json"
+      },
+      {
+        "label": "Marshmallow Custom 1 Night",
+        "uiTheme": "vs-dark",
+        "path": "./themes/marshmallow-custom-1-night-color-theme.json"
+      },
+      {
+        "label": "Marshmallow Custom 1 Day",
+        "uiTheme": "vs",
+        "path": "./themes/marshmallow-custom-1-day-color-theme.json"
+      },
+      {
+        "label": "Marshmallow Custom 2 Night",
+        "uiTheme": "vs-dark",
+        "path": "./themes/marshmallow-custom-2-night-color-theme.json"
+      },
+      {
+        "label": "Marshmallow Custom 2 Day",
+        "uiTheme": "vs",
+        "path": "./themes/marshmallow-custom-2-day-color-theme.json"
+      },
+      {
+        "label": "Marshmallow Custom 3 Night",
+        "uiTheme": "vs-dark",
+        "path": "./themes/marshmallow-custom-3-night-color-theme.json"
+      },
+      {
+        "label": "Marshmallow Custom 3 Day",
+        "uiTheme": "vs",
+        "path": "./themes/marshmallow-custom-3-day-color-theme.json"
       }
     ],
     "configuration": {
