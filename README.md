@@ -2,6 +2,8 @@
 
 *Code that looks good enough to eat.*
 
+![Marshmallow Night and Day](images/hero.png)
+
 Soft pastel syntax on a cocoa-dark or cream-light canvas. Every flavour comes in **Night** (for when the snacks come out) and **Day** (fresh out of the oven).
 
 | Flavour | | Text style |
@@ -16,6 +18,19 @@ Soft pastel syntax on a cocoa-dark or cream-light canvas. Every flavour comes in
 | **Cotton Candy** | Spun-sugar pink and blue, light as air. | Airy: italic keywords, strings, parameters, properties and attributes |
 | **Sea Glass** | Sea-worn teals and soft blues. | Flowing: italic functions, parameters and `this` |
 | **Cherry Cola** | Fizzy red over a dark, sweet base. | Fizzy: bold keywords, functions and types |
+
+![All ten flavours at night](images/flavours-night.png)
+
+<details>
+<summary>And by day</summary>
+
+![All ten flavours by day](images/flavours-day.png)
+
+</details>
+
+## Install
+
+Search for **Marshmallow Theme** in the Extensions view (`Cmd+Shift+X`), or install it from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=marshmellow.marshmallow-theme) or [Open VSX](https://open-vsx.org/extension/marshmellow/marshmallow-theme) (for Cursor, VSCodium and Windsurf). Then pick a flavour from the marshmallow icon in the activity bar, or with **Preferences: Color Theme** (`Cmd+K Cmd+T`).
 
 The text styles look best with a font that has a real italic, such as Victor Mono, Maple Mono or Cascadia Code. Set it with `editor.fontFamily` in your VS Code settings.
 
@@ -42,16 +57,16 @@ All of these live in **Settings → Marshmallow** and at the bottom of the Flavo
 - **Flavour of the day** (off by default): the first window each day opens in a random flavour. Pinned projects keep theirs.
 - **Status bar treat** (on by default): shows the active flavour in the status bar.
 
-## Install locally
+## Developing
 
 ```bash
 npm run package
 code --install-extension marshmallow-theme-0.4.2.vsix
 ```
 
-Then pick a theme with **Preferences: Color Theme** (`Cmd+K Cmd+T`).
+`npm run images` re-renders the icon and the screenshots above with headless Chrome.
 
-## Editing colours
+### Editing colours
 
 The theme files in `themes/` are generated, so don't edit them by hand.
 
