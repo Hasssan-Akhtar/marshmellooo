@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.3
+
+- Sharper icon with transparent corners and a bigger, friendlier marshmallow.
+
 ## 0.4.2
 
 First public release.

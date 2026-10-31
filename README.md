@@ -61,7 +61,7 @@ All of these live in **Settings → Marshmallow** and at the bottom of the Flavo
 
 ```bash
 npm run package
-code --install-extension marshmallow-theme-0.4.2.vsix
+code --install-extension marshmallow-theme-0.4.3.vsix
 ```
 
 `npm run images` re-renders the icon and the screenshots above with headless Chrome.
