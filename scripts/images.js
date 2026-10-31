@@ -15,7 +15,7 @@ function render(name, html, width, height, scale = 2) {
   const file = path.join(tmp, `${name}.html`);
   fs.writeFileSync(file, html);
   const out = path.join(name === 'icon' ? root : outDir, `${name}.png`);
-  execFileSync(CHROME, ['--headless=new', '--disable-gpu', '--hide-scrollbars', `--force-device-scale-factor=${scale}`,
+  execFileSync(CHROME, ['--headless=new', '--disable-gpu', '--hide-scrollbars', '--default-background-color=00000000', `--force-device-scale-factor=${scale}`,
     `--window-size=${width},${height}`, `--screenshot=${out}`, `file://${file}`], { stdio: 'ignore' });
   console.log('wrote', path.relative(root, out));
 }
